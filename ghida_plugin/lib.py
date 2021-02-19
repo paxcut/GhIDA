@@ -263,10 +263,15 @@ def ghidra_headless(address,
             time.sleep(SLEEP_LENGTH)
             counter += 1
             subprocess.Popen.poll(p)
+            if os.name != 'posix':
+                (out, err) = p.communicate()
+                out = out.decode('utf-8')
+                err = err.decode('utf-8')
 
             # Process terminated
             if p.returncode is not None:
                 # print("GhIDA:: [DEBUG] ", str(p.stdout.read(), 'utf-8'))
+                #print("GhIDA:: [DEBUG] ", out)               
                 stop = True
                 print("GhIDA:: [INFO] Ghidra analysis completed!")
                 continue
